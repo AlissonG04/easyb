@@ -11,7 +11,10 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
 
   const toggleEdicao = (index) => {
     setBalancas((prev) =>
-      prev.map((b, i) => (i === index ? { ...b, editando: !b.editando } : b))
+      prev.map((b, i) => ({
+        ...b,
+        editando: i === index ? !b.editando : false, // só uma balança editável por vez
+      }))
     );
   };
 
@@ -23,7 +26,7 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
 
   const handleSalvar = () => {
     console.log("Dados enviados ao servidor:", balancas);
-    // Futuramente será feita requisição para o backend
+    // Integração futura com backend
   };
 
   if (!visible) return null;
@@ -44,7 +47,15 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
       {/* Balanças */}
       <div className="grid grid-cols-2 gap-4 mt-4">
         {balancas.map((b, i) => (
-          <div key={i} className="bg-gray-200 p-4 rounded space-y-2">
+          <div key={i} className="bg-gray-200 p-4 rounded space-y-2 relative">
+            <button
+              className="absolute top-2 right-2"
+              onClick={() => toggleEdicao(i)}
+              title="Editar esta balança"
+            >
+              <img src={editarIcon} className="w-4 h-4 cursor-pointer" />
+            </button>
+
             <div className="flex items-center gap-2">
               <label className="text-sm w-16">Balança:</label>
               <input
@@ -53,12 +64,6 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
                 readOnly={!b.editando}
                 onChange={(e) => handleChange(i, "nome", e.target.value)}
                 className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
-              />
-              <img
-                src={editarIcon}
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => toggleEdicao(i)}
-                title="Editar"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -70,12 +75,6 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
                 onChange={(e) => handleChange(i, "ip", e.target.value)}
                 className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
               />
-              <img
-                src={editarIcon}
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => toggleEdicao(i)}
-                title="Editar"
-              />
             </div>
             <div className="flex items-center gap-2">
               <label className="text-sm w-16">Porta:</label>
@@ -85,12 +84,6 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
                 readOnly={!b.editando}
                 onChange={(e) => handleChange(i, "porta", e.target.value)}
                 className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
-              />
-              <img
-                src={editarIcon}
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => toggleEdicao(i)}
-                title="Editar"
               />
             </div>
           </div>
