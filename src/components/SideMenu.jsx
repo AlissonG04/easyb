@@ -8,7 +8,12 @@ import sairIcon from "../assets/sair.png";
 import SubMenuRelatorios from "./SubMenuRelatorios";
 import SubMenuBase from "./SubMenuBase";
 
-export default function SideMenu({ isOpen, onClose, onSelectItem }) {
+export default function SideMenu({
+  isOpen,
+  onClose,
+  onSelectItem,
+  onRelatorioSelect,
+}) {
   const menuRef = useRef();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const [submenuRelOpen, setSubmenuRelOpen] = useState(false);
@@ -37,12 +42,6 @@ export default function SideMenu({ isOpen, onClose, onSelectItem }) {
   if (!isOpen) return null;
 
   const handleClick = (label) => {
-    // Primeiro: dispara a ação para HomePage (abrir modal, etc.)
-    if (onSelectItem) {
-      onSelectItem(label);
-    }
-
-    // Depois: controla a visibilidade do menu
     if (label === "Relatórios") {
       setMenuMinimized(true);
       setSubmenuRelOpen(true);
@@ -56,6 +55,19 @@ export default function SideMenu({ isOpen, onClose, onSelectItem }) {
       setSubmenuRelOpen(false);
       setSubmenuBaseOpen(false);
     }
+
+    if (onSelectItem) {
+      onSelectItem(label);
+    }
+  };
+
+  const handleRelatorioSelecionado = (tipo) => {
+    if (onRelatorioSelect) {
+      onRelatorioSelect(tipo);
+    }
+    onClose(); // fecha o menu após escolher relatório
+    setSubmenuRelOpen(false);
+    setMenuMinimized(false);
   };
 
   const items = [
@@ -89,7 +101,11 @@ export default function SideMenu({ isOpen, onClose, onSelectItem }) {
         </ul>
       </div>
 
-      <SubMenuRelatorios visible={submenuRelOpen} />
+      <SubMenuRelatorios
+        visible={submenuRelOpen}
+        onSelect={handleRelatorioSelecionado}
+      />
+
       <SubMenuBase visible={submenuBaseOpen} />
     </div>
   );
