@@ -1,6 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aqui vai a lógica real de autenticação futuramente
+    navigate("/home");
+  };
+
   return (
-    <form className="mt-6 flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
       <input
         type="text"
         placeholder="Usuário:"
