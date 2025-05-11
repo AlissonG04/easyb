@@ -7,6 +7,7 @@ import UsuariosModal from "../modals/UsuariosModal";
 import RelatorioBuscaModal from "../modals/RelatorioBuscaModal";
 import BalancasModal from "../modals/BalancasModal";
 import IpsPortasBalancasModal from "../modals/IpsPortasBalancasModal";
+import IpsTabletsModal from "../modals/IpsTabletsModal"; // <- Novo modal
 import {
   gerarRelatorioComplemento,
   gerarRelatorioUsuarios,
@@ -17,6 +18,7 @@ export default function HomePage() {
   const [modalUsuariosOpen, setModalUsuariosOpen] = useState(false);
   const [modalBalancasOpen, setModalBalancasOpen] = useState(false);
   const [modalIpsOpen, setModalIpsOpen] = useState(false);
+  const [modalTabletsOpen, setModalTabletsOpen] = useState(false); // <- Novo estado
   const [relatorioAberto, setRelatorioAberto] = useState(null); // "complemento" | "usuarios"
 
   const handleMenuItem = (label) => {
@@ -32,6 +34,8 @@ export default function HomePage() {
   const handleBaseSelect = (tipo) => {
     if (tipo === "ips") {
       setModalIpsOpen(true);
+    } else if (tipo === "tablets") {
+      setModalTabletsOpen(true);
     }
   };
 
@@ -119,6 +123,11 @@ export default function HomePage() {
       <IpsPortasBalancasModal
         visible={modalIpsOpen}
         onClose={() => setModalIpsOpen(false)}
+      />
+
+      <IpsTabletsModal
+        visible={modalTabletsOpen}
+        onClose={() => setModalTabletsOpen(false)}
       />
 
       <RelatorioBuscaModal

@@ -17,14 +17,14 @@ export default function SubMenuBase({ visible, onSelect }) {
           className="flex items-center gap-2 px-4 py-3 hover:bg-gray-100 cursor-pointer"
           onClick={() => handleSelect("ips")}
         >
-          <img src={balancasIcon} alt="Icone balança" className="w-5 h-5" />
+          <img src={balancasIcon} alt="Ícone balança" className="w-5 h-5" />
           <span className="text-sm">IPs e Portas das Balanças</span>
         </li>
         <li
           className="flex items-center gap-2 px-4 py-3 hover:bg-gray-100 cursor-pointer"
           onClick={() => handleSelect("tablets")}
         >
-          <img src={tabletIcon} alt="Icone tablet" className="w-5 h-5" />
+          <img src={tabletIcon} alt="Ícone tablet" className="w-5 h-5" />
           <span className="text-sm">IPs dos Tablets</span>
         </li>
       </ul>
