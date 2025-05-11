@@ -5,17 +5,22 @@ import Watermark from "../components/Watermark";
 import logoEmpresa from "../assets/terra-branca.png";
 import UsuariosModal from "../modals/UsuariosModal";
 import RelatorioBuscaModal from "../modals/RelatorioBuscaModal";
+import BalancasModal from "../modals/BalancasModal";
 import { gerarRelatorioComplemento } from "../utils/relatoriosUtils";
 import { gerarRelatorioUsuarios } from "../utils/relatoriosUtils";
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalUsuariosOpen, setModalUsuariosOpen] = useState(false);
+  const [modalBalancasOpen, setModalBalancasOpen] = useState(false);
   const [relatorioAberto, setRelatorioAberto] = useState(null); // "complemento" | "usuarios" | null
 
   const handleMenuItem = (label) => {
     if (label === "Usuários") {
       setModalUsuariosOpen(true);
+      setMenuOpen(false);
+    } else if (label === "Balanças") {
+      setModalBalancasOpen(true);
       setMenuOpen(false);
     }
   };
@@ -93,6 +98,11 @@ export default function HomePage() {
       <UsuariosModal
         visible={modalUsuariosOpen}
         onClose={() => setModalUsuariosOpen(false)}
+      />
+
+      <BalancasModal
+        visible={modalBalancasOpen}
+        onClose={() => setModalBalancasOpen(false)}
       />
 
       <RelatorioBuscaModal
