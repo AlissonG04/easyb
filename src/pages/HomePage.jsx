@@ -5,20 +5,50 @@ import Watermark from "../components/Watermark";
 import logoEmpresa from "../assets/terra-branca.png";
 import UsuariosModal from "../modals/UsuariosModal";
 import RelatorioBuscaModal from "../modals/RelatorioBuscaModal";
+import { gerarRelatorioComplemento } from "../utils/relatoriosUtils";
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalUsuariosOpen, setModalUsuariosOpen] = useState(false);
   const [relatorioAberto, setRelatorioAberto] = useState(null); // "complemento" | "usuarios" | null
 
-  // Menu principal (ex: Usuários)
   const handleMenuItem = (label) => {
     if (label === "Usuários") {
       setModalUsuariosOpen(true);
       setMenuOpen(false);
     }
-    // Outros modais futuros
   };
+
+  const dadosMockComplemento = [
+    {
+      data: "09/05/2025",
+      placa: "ABC-2A22",
+      balanca: "01",
+      solicitante: "Jhon Doe",
+      tara: 21000,
+      liquido: 38500,
+      brutoD: 59500,
+      brutoF: 59700,
+      operador: "Jane Doe",
+      status: "Finalizada",
+      horaSolicitacao: "11:00:58",
+      horaFinalizacao: "11:05:02",
+    },
+    {
+      data: "09/05/2025",
+      placa: "AAC-A33",
+      balanca: "02",
+      solicitante: "Jane Doe",
+      tara: 10000,
+      liquido: 14000,
+      brutoD: 24000,
+      brutoF: 24000,
+      operador: "Jane Doe",
+      status: "Rejeitado",
+      horaSolicitacao: "10:00:51",
+      horaFinalizacao: "10:05:00",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-300 relative overflow-y-auto">
@@ -29,7 +59,7 @@ export default function HomePage() {
         onClose={() => setMenuOpen(false)}
         onSelectItem={handleMenuItem}
         onRelatorioSelect={(tipo) => {
-          setRelatorioAberto(tipo); // "complemento" ou "usuarios"
+          setRelatorioAberto(tipo);
           setMenuOpen(false);
         }}
       />
@@ -60,7 +90,10 @@ export default function HomePage() {
         }
         onClose={() => setRelatorioAberto(null)}
         onGerar={(filtros) => {
-          console.log("Gerar relatório:", relatorioAberto, filtros);
+          if (relatorioAberto === "complemento") {
+            gerarRelatorioComplemento(dadosMockComplemento, filtros);
+          }
+          // Aqui virá gerar relatorios futuros
         }}
       />
 
