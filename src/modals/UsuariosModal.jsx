@@ -2,6 +2,8 @@ import { useState } from "react";
 import usuariosIcon from "../assets/usuarios.png";
 import lupaIcon from "../assets/buscar.png";
 import maisIcon from "../assets/adicionar.png";
+import editarIcon from "../assets/editar_usuario.png";
+import excluirIcon from "../assets/apagar.png";
 
 export default function UsuariosModal({ visible, onClose }) {
   const [filtro, setFiltro] = useState("");
@@ -81,6 +83,7 @@ export default function UsuariosModal({ visible, onClose }) {
                 <th>Usuário</th>
                 <th>Tipo</th>
                 <th>Criado em</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -90,6 +93,22 @@ export default function UsuariosModal({ visible, onClose }) {
                   <td>{u.usuario}</td>
                   <td>{u.tipo}</td>
                   <td>{u.criadoEm}</td>
+                  <td className="flex gap-3 py-1">
+                    <button title="Editar">
+                      <img
+                        src={editarIcon}
+                        alt="Editar"
+                        className="w-5 h-5 cursor-pointer"
+                      />
+                    </button>
+                    <button title="Excluir">
+                      <img
+                        src={excluirIcon}
+                        alt="Excluir"
+                        className="w-5 h-5 cursor-pointer"
+                      />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
