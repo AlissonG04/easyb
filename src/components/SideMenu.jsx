@@ -37,6 +37,12 @@ export default function SideMenu({ isOpen, onClose, onSelectItem }) {
   if (!isOpen) return null;
 
   const handleClick = (label) => {
+    // Primeiro: dispara a ação para HomePage (abrir modal, etc.)
+    if (onSelectItem) {
+      onSelectItem(label);
+    }
+
+    // Depois: controla a visibilidade do menu
     if (label === "Relatórios") {
       setMenuMinimized(true);
       setSubmenuRelOpen(true);
@@ -49,11 +55,6 @@ export default function SideMenu({ isOpen, onClose, onSelectItem }) {
       setMenuMinimized(false);
       setSubmenuRelOpen(false);
       setSubmenuBaseOpen(false);
-    }
-
-    // Dispara para o HomePage tomar ação (ex: abrir modal)
-    if (onSelectItem) {
-      onSelectItem(label);
     }
   };
 

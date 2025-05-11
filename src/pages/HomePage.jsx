@@ -19,20 +19,21 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-300 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-300 relative overflow-y-auto">
       <Header onMenuClick={() => setMenuOpen(!menuOpen)} />
       <SideMenu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
         onSelectItem={handleMenuItem}
       />
-      <div className="flex items-center justify-center h-[calc(100%-4rem)]">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <img
           src={logoEmpresa}
           alt="Logo Terra Branca"
-          className="max-w-xs w-full"
+          className="max-w-xs w-full opacity-100"
         />
       </div>
+
       <UsuariosModal
         visible={modalUsuariosOpen}
         onClose={() => setModalUsuariosOpen(false)}

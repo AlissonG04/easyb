@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import usuariosIcon from "../assets/usuarios.png";
 import lupaIcon from "../assets/buscar.png";
 import maisIcon from "../assets/adicionar.png";
@@ -32,6 +32,13 @@ export default function UsuariosModal({ visible, onClose }) {
     },
   ];
 
+  // Carrega a lista inicial sempre que o modal abrir
+  useEffect(() => {
+    if (visible) {
+      setResultados(usuariosMock);
+    }
+  }, [visible]);
+
   const buscarUsuarios = () => {
     if (filtro.trim() === "") {
       setResultados(usuariosMock);
@@ -43,11 +50,16 @@ export default function UsuariosModal({ visible, onClose }) {
     }
   };
 
+  if (visible) {
+    console.log("⚠️ MODAL VISÍVEL");
+  }
+
   if (!visible) return null;
 
   return (
-    <>
-      <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-3xl bg-white shadow rounded p-4 z-50">
+    <div className="relative z-50">
+      {/* Modal de Usuários visível no fluxo normal da página */}
+      <div className="relative w-full max-w-3xl mx-auto mt-10 bg-white shadow rounded p-4">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between border-b pb-2">
           <div className="flex items-center gap-2">
@@ -129,10 +141,11 @@ export default function UsuariosModal({ visible, onClose }) {
         </div>
       </div>
 
+      {/* Modal de Novo Usuário, logo abaixo */}
       <NovoUsuarioModal
         visible={novoUsuarioAberto}
         onClose={() => setNovoUsuarioAberto(false)}
       />
-    </>
+    </div>
   );
 }

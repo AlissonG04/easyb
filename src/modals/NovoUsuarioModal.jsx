@@ -46,7 +46,7 @@ export default function NovoUsuarioModal({ visible, onClose }) {
   };
 
   return (
-    <div className="absolute left-1/2 top-[calc(50%+120px)] transform -translate-x-1/2 w-full max-w-3xl bg-white shadow rounded p-4 z-50">
+    <div className="absolute left-1/2 top-full mt-2 transform -translate-x-1/2 w-full max-w-3xl bg-white shadow rounded p-4 z-40">
       {/* Cabeçalho */}
       <div className="flex items-center justify-between border-b pb-2">
         <div className="flex items-center gap-2">
