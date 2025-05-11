@@ -8,7 +8,7 @@ import sairIcon from "../assets/sair.png";
 import SubMenuRelatorios from "./SubMenuRelatorios";
 import SubMenuBase from "./SubMenuBase";
 
-export default function SideMenu({ isOpen, onClose }) {
+export default function SideMenu({ isOpen, onClose, onSelectItem }) {
   const menuRef = useRef();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const [submenuRelOpen, setSubmenuRelOpen] = useState(false);
@@ -18,7 +18,7 @@ export default function SideMenu({ isOpen, onClose }) {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        onClose(); // ← função que está no HomePage
+        onClose();
         setMenuMinimized(false);
         setSubmenuRelOpen(false);
         setSubmenuBaseOpen(false);
@@ -49,6 +49,11 @@ export default function SideMenu({ isOpen, onClose }) {
       setMenuMinimized(false);
       setSubmenuRelOpen(false);
       setSubmenuBaseOpen(false);
+    }
+
+    // Dispara para o HomePage tomar ação (ex: abrir modal)
+    if (onSelectItem) {
+      onSelectItem(label);
     }
   };
 
