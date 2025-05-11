@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import usuariosIcon from "../assets/usuarios.png";
 import relatoriosIcon from "../assets/relatorios.png";
 import balancasIcon from "../assets/balancas.png";
@@ -8,10 +8,31 @@ import sairIcon from "../assets/sair.png";
 import SubMenuRelatorios from "./SubMenuRelatorios";
 import SubMenuBase from "./SubMenuBase";
 
-export default function SideMenu({ isOpen }) {
+export default function SideMenu({ isOpen, onClose }) {
+  const menuRef = useRef();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const [submenuRelOpen, setSubmenuRelOpen] = useState(false);
   const [submenuBaseOpen, setSubmenuBaseOpen] = useState(false);
+
+  // Fecha o menu se clicar fora dele
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        onClose(); // ← função que está no HomePage
+        setMenuMinimized(false);
+        setSubmenuRelOpen(false);
+        setSubmenuBaseOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -41,7 +62,7 @@ export default function SideMenu({ isOpen }) {
   ];
 
   return (
-    <>
+    <div ref={menuRef}>
       <div
         className={`fixed top-16 left-0 ${
           menuMinimized ? "w-14" : "w-56"
@@ -64,6 +85,6 @@ export default function SideMenu({ isOpen }) {
 
       <SubMenuRelatorios visible={submenuRelOpen} />
       <SubMenuBase visible={submenuBaseOpen} />
-    </>
+    </div>
   );
 }

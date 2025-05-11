@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <div className="w-screen h-screen bg-gray-300 relative overflow-hidden">
       <Header onMenuClick={() => setMenuOpen(!menuOpen)} />
-      <SideMenu isOpen={menuOpen} />
+      <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="flex items-center justify-center h-[calc(100%-4rem)]">
         <img
           src={logoEmpresa}
