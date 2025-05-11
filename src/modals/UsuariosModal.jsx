@@ -6,35 +6,33 @@ import editarIcon from "../assets/editar_usuario.png";
 import excluirIcon from "../assets/apagar.png";
 import NovoUsuarioModal from "./NovoUsuarioModal";
 import EditarUsuarioModal from "./EditarUsuarioModal";
+import ConfirmarExclusaoModal from "./ConfirmarExclusaoModal";
 
 export default function UsuariosModal({ visible, onClose }) {
   const [filtro, setFiltro] = useState("");
   const [resultados, setResultados] = useState([]);
   const [novoUsuarioAberto, setNovoUsuarioAberto] = useState(false);
   const [usuarioParaEditar, setUsuarioParaEditar] = useState(null);
+  const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
 
   const usuariosMock = [
     {
       nome: "Jhon Doe",
       usuario: "jnd",
-      tipo: "Administrador",
       criadoEm: "10/05/2025",
     },
     {
       nome: "Maria Silva",
       usuario: "msilva",
-      tipo: "Operador",
       criadoEm: "08/05/2025",
     },
     {
       nome: "Carlos Lima",
       usuario: "clima",
-      tipo: "Supervisor",
       criadoEm: "07/05/2025",
     },
   ];
 
-  // Carrega a lista inicial sempre que o modal abrir
   useEffect(() => {
     if (visible) {
       setResultados(usuariosMock);
@@ -52,15 +50,16 @@ export default function UsuariosModal({ visible, onClose }) {
     }
   };
 
-  if (visible) {
-    console.log("⚠️ MODAL VISÍVEL");
-  }
+  const handleExcluirConfirmado = (usuario) => {
+    setResultados((prev) => prev.filter((u) => u.usuario !== usuario.usuario));
+    setUsuarioParaExcluir(null);
+  };
 
   if (!visible) return null;
 
   return (
     <div className="relative z-50">
-      {/* Modal de Usuários visível no fluxo normal da página */}
+      {/* Modal principal */}
       <div className="relative w-full max-w-3xl mx-auto mt-10 bg-white shadow rounded p-4">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between border-b pb-2">
@@ -73,7 +72,7 @@ export default function UsuariosModal({ visible, onClose }) {
           </button>
         </div>
 
-        {/* Campo de busca */}
+        {/* Busca */}
         <div className="mt-4 flex items-center gap-2 border-b pb-2">
           <input
             type="text"
@@ -87,7 +86,7 @@ export default function UsuariosModal({ visible, onClose }) {
           </button>
         </div>
 
-        {/* Resultados */}
+        {/* Lista de usuários */}
         <div className="mt-4 h-40 overflow-y-auto border border-gray-300 rounded p-2">
           {resultados.length === 0 ? (
             <p className="text-sm text-gray-500">Nenhum usuário encontrado.</p>
@@ -118,8 +117,10 @@ export default function UsuariosModal({ visible, onClose }) {
                           className="w-5 h-5 cursor-pointer"
                         />
                       </button>
-
-                      <button title="Excluir">
+                      <button
+                        title="Excluir"
+                        onClick={() => setUsuarioParaExcluir(u)}
+                      >
                         <img
                           src={excluirIcon}
                           alt="Excluir"
@@ -134,7 +135,7 @@ export default function UsuariosModal({ visible, onClose }) {
           )}
         </div>
 
-        {/* Botão Novo Usuário */}
+        {/* Botão adicionar */}
         <div className="mt-4 flex justify-start">
           <button
             onClick={() => setNovoUsuarioAberto(true)}
@@ -145,15 +146,23 @@ export default function UsuariosModal({ visible, onClose }) {
         </div>
       </div>
 
-      {/* Modal de Novo Usuário, logo abaixo */}
+      {/* Modais auxiliares */}
       <NovoUsuarioModal
         visible={novoUsuarioAberto}
         onClose={() => setNovoUsuarioAberto(false)}
       />
+
       <EditarUsuarioModal
         visible={!!usuarioParaEditar}
         onClose={() => setUsuarioParaEditar(null)}
         usuario={usuarioParaEditar}
+      />
+
+      <ConfirmarExclusaoModal
+        visible={!!usuarioParaExcluir}
+        onCancel={() => setUsuarioParaExcluir(null)}
+        onConfirm={handleExcluirConfirmado}
+        usuario={usuarioParaExcluir}
       />
     </div>
   );
