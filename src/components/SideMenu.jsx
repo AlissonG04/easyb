@@ -13,13 +13,13 @@ export default function SideMenu({
   onClose,
   onSelectItem,
   onRelatorioSelect,
+  onBaseSelect,
 }) {
   const menuRef = useRef();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const [submenuRelOpen, setSubmenuRelOpen] = useState(false);
   const [submenuBaseOpen, setSubmenuBaseOpen] = useState(false);
 
-  // Fecha o menu se clicar fora dele
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -65,8 +65,17 @@ export default function SideMenu({
     if (onRelatorioSelect) {
       onRelatorioSelect(tipo);
     }
-    onClose(); // fecha o menu após escolher relatório
+    onClose();
     setSubmenuRelOpen(false);
+    setMenuMinimized(false);
+  };
+
+  const handleBaseSelecionada = (tipo) => {
+    if (onBaseSelect) {
+      onBaseSelect(tipo);
+    }
+    onClose();
+    setSubmenuBaseOpen(false);
     setMenuMinimized(false);
   };
 
@@ -105,8 +114,7 @@ export default function SideMenu({
         visible={submenuRelOpen}
         onSelect={handleRelatorioSelecionado}
       />
-
-      <SubMenuBase visible={submenuBaseOpen} />
+      <SubMenuBase visible={submenuBaseOpen} onSelect={handleBaseSelecionada} />
     </div>
   );
 }
