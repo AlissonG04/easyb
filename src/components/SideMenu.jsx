@@ -6,20 +6,28 @@ import ferramentasIcon from "../assets/ferramentas.png";
 import pesagemIcon from "../assets/pesagem.png";
 import sairIcon from "../assets/sair.png";
 import SubMenuRelatorios from "./SubMenuRelatorios";
+import SubMenuBase from "./SubMenuBase";
 
-export default function SideMenu({ isOpen, onClose }) {
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+export default function SideMenu({ isOpen }) {
   const [menuMinimized, setMenuMinimized] = useState(false);
+  const [submenuRelOpen, setSubmenuRelOpen] = useState(false);
+  const [submenuBaseOpen, setSubmenuBaseOpen] = useState(false);
 
-  if (!isOpen) return null; // Esconde completamente se o menu estiver fechado
+  if (!isOpen) return null;
 
   const handleClick = (label) => {
     if (label === "Relatórios") {
       setMenuMinimized(true);
-      setSubmenuOpen(true);
+      setSubmenuRelOpen(true);
+      setSubmenuBaseOpen(false);
+    } else if (label === "Base") {
+      setMenuMinimized(true);
+      setSubmenuRelOpen(false);
+      setSubmenuBaseOpen(true);
     } else {
       setMenuMinimized(false);
-      setSubmenuOpen(false);
+      setSubmenuRelOpen(false);
+      setSubmenuBaseOpen(false);
     }
   };
 
@@ -37,7 +45,7 @@ export default function SideMenu({ isOpen, onClose }) {
       <div
         className={`fixed top-16 left-0 ${
           menuMinimized ? "w-14" : "w-56"
-        } bg-white shadow transition-all duration-300 z-50"} mt-[8px]`}
+        } bg-white shadow transition-all duration-300 mt-[8px]`}
         style={{ zIndex: 50 }}
       >
         <ul className="divide-y divide-gray-300">
@@ -54,7 +62,8 @@ export default function SideMenu({ isOpen, onClose }) {
         </ul>
       </div>
 
-      <SubMenuRelatorios visible={submenuOpen} />
+      <SubMenuRelatorios visible={submenuRelOpen} />
+      <SubMenuBase visible={submenuBaseOpen} />
     </>
   );
 }
