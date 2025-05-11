@@ -6,6 +6,7 @@ import logoEmpresa from "../assets/terra-branca.png";
 import UsuariosModal from "../modals/UsuariosModal";
 import RelatorioBuscaModal from "../modals/RelatorioBuscaModal";
 import { gerarRelatorioComplemento } from "../utils/relatoriosUtils";
+import { gerarRelatorioUsuarios } from "../utils/relatoriosUtils";
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,6 +48,21 @@ export default function HomePage() {
       status: "Rejeitado",
       horaSolicitacao: "10:00:51",
       horaFinalizacao: "10:05:00",
+    },
+  ];
+
+  const dadosMockUsuarios = [
+    {
+      nome: "Jhon Doe",
+      usuario: "jnd",
+      criadoEm: "10/05/2025",
+      privilegios: ["Usuários", "Relatórios"],
+    },
+    {
+      nome: "Maria Silva",
+      usuario: "msilva",
+      criadoEm: "08/05/2025",
+      privilegios: ["Base", "Operador (Tablet)"],
     },
   ];
 
@@ -92,8 +108,9 @@ export default function HomePage() {
         onGerar={(filtros) => {
           if (relatorioAberto === "complemento") {
             gerarRelatorioComplemento(dadosMockComplemento, filtros);
+          } else if (relatorioAberto === "usuarios") {
+            gerarRelatorioUsuarios(dadosMockUsuarios, filtros);
           }
-          // Aqui virá gerar relatorios futuros
         }}
       />
 

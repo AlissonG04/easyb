@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório - Usuários Cadastrados</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 40px;
+        font-size: 14px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+      }
+      .titulo {
+        text-align: center;
+        flex-grow: 1;
+        font-weight: bold;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #aaa;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background: #eee;
+      }
+      footer {
+        margin-top: 20px;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .logo {
+        height: 40px;
+      }
+      .print-btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="../src/assets/terra-branca.png" class="logo" />
+      <div class="titulo">
+        <div>Usuários Cadastrados</div>
+        <div id="periodo"></div>
+      </div>
+      <div class="print-btn" onclick="window.print()">🖨️ Imprimir</div>
+    </header>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Usuário</th>
+          <th>Criado em</th>
+          <th>Privilégios</th>
+        </tr>
+      </thead>
+      <tbody id="relatorio-body">
+        <!-- Linhas geradas via script -->
+      </tbody>
+    </table>
+
+    <footer id="contagem">
+      <!-- Totais -->
+    </footer>
+
+    <script>
+      const dados = JSON.parse(localStorage.getItem("relatorioDados") || "[]");
+      const filtros = JSON.parse(
+        localStorage.getItem("relatorioFiltros") || "{}"
+      );
+
+      document.getElementById("periodo").textContent = `${
+        filtros.dataInicial || ""
+      } a ${filtros.dataFinal || ""}`;
+
+      const tbody = document.getElementById("relatorio-body");
+      dados.forEach((u) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${u.nome}</td>
+          <td>${u.usuario}</td>
+          <td>${u.criadoEm}</td>
+          <td>${u.privilegios.join(", ")}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById(
+        "contagem"
+      ).innerHTML = `Total de usuários: ${dados.length}`;
+    </script>
+  </body>
+</html>
