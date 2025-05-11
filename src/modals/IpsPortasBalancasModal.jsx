@@ -5,9 +5,15 @@ import editarIcon from "../assets/editar.png";
 
 export default function IpsPortasBalancasModal({ visible, onClose }) {
   const [balancas, setBalancas] = useState([
-    { nome: "Balança 01", ip: "192.168.0.27", porta: "23" },
-    { nome: "Balança 02", ip: "192.168.0.127", porta: "6432" },
+    { nome: "Balança 01", ip: "192.168.0.27", porta: "23", editando: false },
+    { nome: "Balança 02", ip: "192.168.0.127", porta: "6432", editando: false },
   ]);
+
+  const toggleEdicao = (index) => {
+    setBalancas((prev) =>
+      prev.map((b, i) => (i === index ? { ...b, editando: !b.editando } : b))
+    );
+  };
 
   const handleChange = (index, field, value) => {
     const novaLista = [...balancas];
@@ -44,30 +50,48 @@ export default function IpsPortasBalancasModal({ visible, onClose }) {
               <input
                 type="text"
                 value={b.nome}
+                readOnly={!b.editando}
                 onChange={(e) => handleChange(i, "nome", e.target.value)}
-                className="flex-1 text-sm px-2 py-1 rounded"
+                className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
               />
-              <img src={editarIcon} className="w-4 h-4" />
+              <img
+                src={editarIcon}
+                className="w-4 h-4 cursor-pointer"
+                onClick={() => toggleEdicao(i)}
+                title="Editar"
+              />
             </div>
             <div className="flex items-center gap-2">
               <label className="text-sm w-16">IP:</label>
               <input
                 type="text"
                 value={b.ip}
+                readOnly={!b.editando}
                 onChange={(e) => handleChange(i, "ip", e.target.value)}
-                className="flex-1 text-sm px-2 py-1 rounded"
+                className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
               />
-              <img src={editarIcon} className="w-4 h-4" />
+              <img
+                src={editarIcon}
+                className="w-4 h-4 cursor-pointer"
+                onClick={() => toggleEdicao(i)}
+                title="Editar"
+              />
             </div>
             <div className="flex items-center gap-2">
               <label className="text-sm w-16">Porta:</label>
               <input
                 type="text"
                 value={b.porta}
+                readOnly={!b.editando}
                 onChange={(e) => handleChange(i, "porta", e.target.value)}
-                className="flex-1 text-sm px-2 py-1 rounded"
+                className="flex-1 text-sm px-2 py-1 rounded bg-white outline-none"
               />
-              <img src={editarIcon} className="w-4 h-4" />
+              <img
+                src={editarIcon}
+                className="w-4 h-4 cursor-pointer"
+                onClick={() => toggleEdicao(i)}
+                title="Editar"
+              />
             </div>
           </div>
         ))}
