@@ -5,11 +5,13 @@ import maisIcon from "../assets/adicionar.png";
 import editarIcon from "../assets/editar_usuario.png";
 import excluirIcon from "../assets/apagar.png";
 import NovoUsuarioModal from "./NovoUsuarioModal";
+import EditarUsuarioModal from "./EditarUsuarioModal";
 
 export default function UsuariosModal({ visible, onClose }) {
   const [filtro, setFiltro] = useState("");
   const [resultados, setResultados] = useState([]);
   const [novoUsuarioAberto, setNovoUsuarioAberto] = useState(false);
+  const [usuarioParaEditar, setUsuarioParaEditar] = useState(null);
 
   const usuariosMock = [
     {
@@ -106,13 +108,17 @@ export default function UsuariosModal({ visible, onClose }) {
                     <td>{u.usuario}</td>
                     <td>{u.criadoEm}</td>
                     <td className="flex gap-3 py-1">
-                      <button title="Editar">
+                      <button
+                        title="Editar"
+                        onClick={() => setUsuarioParaEditar(u)}
+                      >
                         <img
                           src={editarIcon}
                           alt="Editar"
                           className="w-5 h-5 cursor-pointer"
                         />
                       </button>
+
                       <button title="Excluir">
                         <img
                           src={excluirIcon}
@@ -143,6 +149,11 @@ export default function UsuariosModal({ visible, onClose }) {
       <NovoUsuarioModal
         visible={novoUsuarioAberto}
         onClose={() => setNovoUsuarioAberto(false)}
+      />
+      <EditarUsuarioModal
+        visible={!!usuarioParaEditar}
+        onClose={() => setUsuarioParaEditar(null)}
+        usuario={usuarioParaEditar}
       />
     </div>
   );
