@@ -95,7 +95,6 @@ export default function UsuariosModal({ visible, onClose }) {
                 <tr className="text-left border-b text-gray-600">
                   <th className="py-1">Nome</th>
                   <th>Usuário</th>
-                  <th>Tipo</th>
                   <th>Criado em</th>
                   <th>Ações</th>
                 </tr>
@@ -105,7 +104,6 @@ export default function UsuariosModal({ visible, onClose }) {
                   <tr key={i} className="border-b">
                     <td className="py-1">{u.nome}</td>
                     <td>{u.usuario}</td>
-                    <td>{u.tipo}</td>
                     <td>{u.criadoEm}</td>
                     <td className="flex gap-3 py-1">
                       <button title="Editar">
