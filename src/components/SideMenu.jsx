@@ -44,19 +44,23 @@ export default function SideMenu({
 
   const handleClick = (label) => {
     if (label === "Relatórios") {
-      setMenuMinimized(true);
-      setSubmenuRelOpen(true);
+      setMenuMinimized(true); // minimiza menu
+      setSubmenuRelOpen((prev) => !prev); // toggle submenu
       setSubmenuBaseOpen(false);
-    } else if (label === "Base") {
-      setMenuMinimized(true);
-      setSubmenuRelOpen(false);
-      setSubmenuBaseOpen(true);
-    } else {
-      setMenuMinimized(false);
-      setSubmenuRelOpen(false);
-      setSubmenuBaseOpen(false);
+      return;
     }
 
+    if (label === "Base") {
+      setMenuMinimized(true); // minimiza menu
+      setSubmenuBaseOpen((prev) => !prev); // toggle submenu
+      setSubmenuRelOpen(false);
+      return;
+    }
+
+    // Qualquer outro item fecha tudo e executa ação
+    setMenuMinimized(false);
+    setSubmenuRelOpen(false);
+    setSubmenuBaseOpen(false);
     if (onSelectItem) {
       onSelectItem(label);
     }
