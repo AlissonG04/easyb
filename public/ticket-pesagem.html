@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ticket de Pesagem</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 1rem;
+      }
+      .header {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+      .ticket {
+        border: 1px solid #000;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      .flex {
+        display: flex;
+        justify-content: space-between;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .logo {
+        height: 50px;
+      }
+      table {
+        width: 100%;
+        margin-top: 1rem;
+        border-collapse: collapse;
+      }
+      td {
+        border: 1px solid #000;
+        padding: 4px;
+        font-size: 14px;
+      }
+      .right {
+        text-align: right;
+      }
+      .center {
+        text-align: center;
+      }
+      .print-btn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+      }
+      @media print {
+        .print-btn {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
+    <div id="conteudo"></div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const dados = JSON.parse(decodeURIComponent(params.get("dados")));
+
+      const gerarVia = (numero) => `
+      <div class="ticket">
+        <div class="flex">
+          <img src="../src/assets/terra-branca.png" class="logo" />
+          <div><span class="bold">Pesagem:</span> ${numero}</div>
+          <div>
+            <div><span class="bold">Data de Emissão:</span> ${dados.data}</div>
+            <div><span class="bold">Hora:</span> ${dados.hora}</div>
+          </div>
+        </div>
+        <table>
+          <tr>
+            <td><span class="bold">Cliente:</span><br>${dados.cliente}</td>
+            <td><span class="bold">Produto:</span><br>${dados.produto}</td>
+          </tr>
+          <tr>
+            <td><span class="bold">Motorista:</span><br>${dados.motorista}</td>
+            <td><span class="bold">Placa:</span><br>${dados.placa}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><span class="bold">Observações:</span><br>${dados.observacoes}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="right">
+              <span class="bold">Tara:</span> ${dados.tara} |
+              <span class="bold">Líquido:</span> ${dados.liquido} |
+              <span class="bold">Bruto:</span> ${dados.bruto}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><span class="bold">Emitido Por:</span> _____________</td>
+          </tr>
+        </table>
+      </div>
+    `;
+
+      document.getElementById("conteudo").innerHTML =
+        gerarVia("01") + gerarVia("01");
+    </script>
+  </body>
+</html>

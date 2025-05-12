@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import pesagemIcon from "../assets/pesagem.png";
 import imprimirIcon from "../assets/relatorios.png";
+import { emitirTicketPesagem } from "../utils/relatoriosUtils";
 
 export default function EmissaoPesagemModal({ visible, onClose }) {
   const [form, setForm] = useState({
@@ -33,8 +34,14 @@ export default function EmissaoPesagemModal({ visible, onClose }) {
   };
 
   const handleEmitir = () => {
-    console.log("Dados da pesagem:", form);
-    // Integração futura com backend
+    const now = new Date();
+    const dados = {
+      ...form,
+      data: now.toLocaleDateString("pt-BR"),
+      hora: now.toLocaleTimeString("pt-BR"),
+    };
+
+    emitirTicketPesagem(dados);
   };
 
   return (

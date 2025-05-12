@@ -11,3 +11,11 @@ export function gerarRelatorioUsuarios(dados, filtros) {
   localStorage.setItem("relatorioFiltros", JSON.stringify(filtros));
   window.open("/relatorio-usuarios.html", "_blank");
 }
+
+// Gerar Ticket
+export function emitirTicketPesagem(dados) {
+  const url = `/ticket-pesagem.html?dados=${encodeURIComponent(
+    JSON.stringify(dados)
+  )}`;
+  window.open(url, "_blank");
+}
