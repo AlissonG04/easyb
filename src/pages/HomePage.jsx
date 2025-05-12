@@ -7,7 +7,8 @@ import UsuariosModal from "../modals/UsuariosModal";
 import RelatorioBuscaModal from "../modals/RelatorioBuscaModal";
 import BalancasModal from "../modals/BalancasModal";
 import IpsPortasBalancasModal from "../modals/IpsPortasBalancasModal";
-import IpsTabletsModal from "../modals/IpsTabletsModal"; // <- Novo modal
+import IpsTabletsModal from "../modals/IpsTabletsModal";
+import EmissaoPesagemModal from "../modals/EmissaoPesagemModal"; // <- Novo modal
 import {
   gerarRelatorioComplemento,
   gerarRelatorioUsuarios,
@@ -18,7 +19,8 @@ export default function HomePage() {
   const [modalUsuariosOpen, setModalUsuariosOpen] = useState(false);
   const [modalBalancasOpen, setModalBalancasOpen] = useState(false);
   const [modalIpsOpen, setModalIpsOpen] = useState(false);
-  const [modalTabletsOpen, setModalTabletsOpen] = useState(false); // <- Novo estado
+  const [modalTabletsOpen, setModalTabletsOpen] = useState(false);
+  const [modalPesagemOpen, setModalPesagemOpen] = useState(false); // <- Novo estado
   const [relatorioAberto, setRelatorioAberto] = useState(null); // "complemento" | "usuarios"
 
   const handleMenuItem = (label) => {
@@ -27,6 +29,9 @@ export default function HomePage() {
       setMenuOpen(false);
     } else if (label === "Balanças") {
       setModalBalancasOpen(true);
+      setMenuOpen(false);
+    } else if (label === "Emissão de Pesagens") {
+      setModalPesagemOpen(true);
       setMenuOpen(false);
     }
   };
@@ -128,6 +133,11 @@ export default function HomePage() {
       <IpsTabletsModal
         visible={modalTabletsOpen}
         onClose={() => setModalTabletsOpen(false)}
+      />
+
+      <EmissaoPesagemModal
+        visible={modalPesagemOpen}
+        onClose={() => setModalPesagemOpen(false)}
       />
 
       <RelatorioBuscaModal
