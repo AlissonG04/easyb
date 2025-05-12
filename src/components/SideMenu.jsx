@@ -4,6 +4,7 @@ import relatoriosIcon from "../assets/relatorios.png";
 import balancasIcon from "../assets/balancas.png";
 import ferramentasIcon from "../assets/ferramentas.png";
 import pesagemIcon from "../assets/pesagem.png";
+import pesoIcon from "../assets/pesagem.png";
 import sairIcon from "../assets/sair.png";
 import SubMenuRelatorios from "./SubMenuRelatorios";
 import SubMenuBase from "./SubMenuBase";
@@ -85,6 +86,7 @@ export default function SideMenu({
     { label: "Balanças", icon: balancasIcon },
     { label: "Base", icon: ferramentasIcon },
     { label: "Emissão de Pesagens", icon: pesagemIcon },
+    { label: "Pesagem", icon: pesoIcon },
     { label: "Sair", icon: sairIcon },
   ];
 
