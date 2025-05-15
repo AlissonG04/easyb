@@ -44,9 +44,23 @@ export default function UsuariosModal({ visible, onClose }) {
     }
   };
 
-  const handleExcluirConfirmado = (usuario) => {
-    setResultados((prev) => prev.filter((u) => u.usuario !== usuario.usuario));
-    setUsuarioParaExcluir(null);
+  const handleExcluirConfirmado = async (usuario) => {
+    try {
+      const res = await fetch(`http://localhost:3000/usuarios/${usuario.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Erro ao excluir usuário");
+
+      // Remove localmente da lista
+      setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
+      setResultados((prev) => prev.filter((u) => u.id !== usuario.id));
+      setUsuarioParaExcluir(null);
+      console.log("Usuário excluído com sucesso");
+    } catch (err) {
+      console.error("Erro ao excluir usuário:", err);
+      alert("Erro ao excluir usuário.");
+    }
   };
 
   if (!visible) return null;
