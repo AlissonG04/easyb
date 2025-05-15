@@ -10,40 +10,34 @@ import ConfirmarExclusaoModal from "./ConfirmarExclusaoModal";
 
 export default function UsuariosModal({ visible, onClose }) {
   const [filtro, setFiltro] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
   const [resultados, setResultados] = useState([]);
   const [novoUsuarioAberto, setNovoUsuarioAberto] = useState(false);
   const [usuarioParaEditar, setUsuarioParaEditar] = useState(null);
   const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
 
-  const usuariosMock = [
-    {
-      nome: "Jhon Doe",
-      usuario: "jnd",
-      criadoEm: "10/05/2025",
-    },
-    {
-      nome: "Maria Silva",
-      usuario: "msilva",
-      criadoEm: "08/05/2025",
-    },
-    {
-      nome: "Carlos Lima",
-      usuario: "clima",
-      criadoEm: "07/05/2025",
-    },
-  ];
-
   useEffect(() => {
     if (visible) {
-      setResultados(usuariosMock);
+      fetchUsuarios();
     }
   }, [visible]);
 
+  const fetchUsuarios = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/usuarios");
+      const data = await res.json();
+      setUsuarios(data);
+      setResultados(data);
+    } catch (err) {
+      console.error("Erro ao buscar usuários:", err);
+    }
+  };
+
   const buscarUsuarios = () => {
     if (filtro.trim() === "") {
-      setResultados(usuariosMock);
+      setResultados(usuarios);
     } else {
-      const filtrado = usuariosMock.filter((u) =>
+      const filtrado = usuarios.filter((u) =>
         u.nome.toLowerCase().includes(filtro.toLowerCase())
       );
       setResultados(filtrado);
@@ -59,7 +53,6 @@ export default function UsuariosModal({ visible, onClose }) {
 
   return (
     <div className="relative z-50">
-      {/* Modal principal */}
       <div className="relative w-full max-w-3xl mx-auto mt-10 bg-white shadow rounded p-4">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between border-b pb-2">
@@ -105,7 +98,7 @@ export default function UsuariosModal({ visible, onClose }) {
                   <tr key={i} className="border-b">
                     <td className="py-1">{u.nome}</td>
                     <td>{u.usuario}</td>
-                    <td>{u.criadoEm}</td>
+                    <td>{new Date(u.criado_em).toLocaleDateString("pt-BR")}</td>
                     <td className="flex gap-3 py-1">
                       <button
                         title="Editar"
