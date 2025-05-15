@@ -19,48 +19,23 @@ export default function PesagemModal({ visible, onClose }) {
   const [resultados, setResultados] = useState([]);
   const [pesagemSelecionada, setPesagemSelecionada] = useState(null);
 
-  const dadosMock = [
-    {
-      numero: "001",
-      cliente: "Jhon Doe Smith",
-      motorista: "Jane Doe Santos",
-      placa: "ABC-1A11",
-      produto: "Milho",
-      tara: 20000,
-      liquido: 35000,
-      bruto: 55000,
-      observacoes: "Sem observações.",
-      data: "10/05/2025",
-    },
-    {
-      numero: "002",
-      cliente: "Maria Silva",
-      motorista: "Carlos Souza",
-      placa: "XYZ-2233",
-      produto: "Soja",
-      tara: 19000,
-      liquido: 30000,
-      bruto: 49000,
-      observacoes: "Peso conferido duas vezes.",
-      data: "11/05/2025",
-    },
-  ];
+  const handleBuscar = async () => {
+    try {
+      const query = new URLSearchParams();
 
-  const handleBuscar = () => {
-    const filtrado = dadosMock.filter((item) => {
-      return (
-        (!filtros.cliente ||
-          item.cliente.toLowerCase().includes(filtros.cliente.toLowerCase())) &&
-        (!filtros.motorista ||
-          item.motorista
-            .toLowerCase()
-            .includes(filtros.motorista.toLowerCase())) &&
-        (!filtros.placa ||
-          item.placa.toLowerCase().includes(filtros.placa.toLowerCase())) &&
-        (!filtros.numero || item.numero === filtros.numero)
+      Object.entries(filtros).forEach(([chave, valor]) => {
+        if (valor.trim()) query.append(chave, valor.trim());
+      });
+
+      const res = await fetch(
+        `http://localhost:3000/pesagens?${query.toString()}`
       );
-    });
-    setResultados(filtrado);
+      const data = await res.json();
+      setResultados(data);
+    } catch (err) {
+      console.error("Erro ao buscar pesagens:", err);
+      alert("Erro ao buscar pesagens.");
+    }
   };
 
   if (!visible) return null;
