@@ -11,8 +11,9 @@ export default function SolicitacaoComplementoModal({
   const [bruto, setBruto] = useState(0);
   const [placa, setPlaca] = useState("");
 
-  // Simula usuário logado
-  const solicitante = "Admin";
+  // Usuário logado
+  const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
+  const solicitante = usuarioLogado?.nome || "Desconhecido";
 
   useEffect(() => {
     const t = parseFloat(tara) || 0;
