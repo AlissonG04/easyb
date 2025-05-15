@@ -8,6 +8,11 @@ export default function RelatorioBuscaModal({ visible, onClose, titulo }) {
   if (!visible) return null;
 
   const gerarRelatorio = async () => {
+    // Valida se os campos datas estão preenchidos
+    if (!dataInicial || !dataFinal) {
+      alert("Por favor, informe a data inicial e final.");
+      return;
+    }
     try {
       let url = "";
       let html = "";
