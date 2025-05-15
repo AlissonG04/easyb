@@ -11,7 +11,12 @@ const privilegiosPadrao = [
   "Operador (Tablet)",
 ];
 
-export default function EditarUsuarioModal({ visible, onClose, usuario }) {
+export default function EditarUsuarioModal({
+  visible,
+  onClose,
+  usuario,
+  onUsuarioEditado,
+}) {
   const [form, setForm] = useState({
     nome: "",
     usuario: "",
@@ -25,8 +30,8 @@ export default function EditarUsuarioModal({ visible, onClose, usuario }) {
       setForm({
         nome: usuario.nome || "",
         usuario: usuario.usuario || "",
-        senha: usuario.senha || "",
-        master: usuario.master || false,
+        senha: "", // não preenche senha no formulário por segurança
+        master: usuario.privilegios?.length === privilegiosPadrao.length,
         privilegios: usuario.privilegios || [],
       });
     }
@@ -52,10 +57,38 @@ export default function EditarUsuarioModal({ visible, onClose, usuario }) {
     }));
   };
 
-  const handleSalvar = () => {
-    console.log("Usuário atualizado:", form);
-    // Aqui virá a requisição de update no banco
-    onClose(); // fecha após salvar
+  const handleSalvar = async () => {
+    if (!form.nome || !form.usuario) {
+      alert("Preencha os campos obrigatórios.");
+      return;
+    }
+
+    try {
+      const payload = {
+        nome: form.nome,
+        usuario: form.usuario,
+        senha: form.senha, // se estiver vazio, o back pode ignorar
+        privilegios: form.privilegios,
+      };
+
+      const response = await fetch(
+        `http://localhost:3000/usuarios/${usuario.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) throw new Error("Erro ao atualizar usuário");
+
+      console.log("Usuário atualizado com sucesso");
+      onClose();
+      onUsuarioEditado?.(); // recarrega lista no modal pai
+    } catch (err) {
+      console.error("Erro ao atualizar usuário:", err);
+      alert("Erro ao salvar alterações.");
+    }
   };
 
   return (
@@ -89,7 +122,7 @@ export default function EditarUsuarioModal({ visible, onClose, usuario }) {
         />
         <input
           type="password"
-          placeholder="Senha"
+          placeholder="Nova senha (opcional)"
           value={form.senha}
           onChange={(e) => setForm({ ...form, senha: e.target.value })}
           className="bg-gray-200 px-3 py-2 rounded text-sm outline-none"
@@ -115,6 +148,7 @@ export default function EditarUsuarioModal({ visible, onClose, usuario }) {
               <span className="text-sm">{priv}</span>
             </label>
           ))}
+
           <label className="flex items-center gap-2 col-span-2">
             <input
               type="checkbox"

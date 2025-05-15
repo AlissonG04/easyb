@@ -164,6 +164,7 @@ export default function UsuariosModal({ visible, onClose }) {
         visible={!!usuarioParaEditar}
         onClose={() => setUsuarioParaEditar(null)}
         usuario={usuarioParaEditar}
+        onUsuarioEditado={fetchUsuarios}
       />
 
       <ConfirmarExclusaoModal
