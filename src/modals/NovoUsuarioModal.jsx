@@ -11,7 +11,11 @@ const privilegiosPadrao = [
   "Operador (Tablet)",
 ];
 
-export default function NovoUsuarioModal({ visible, onClose }) {
+export default function NovoUsuarioModal({
+  visible,
+  onClose,
+  onUsuarioCriado,
+}) {
   const [form, setForm] = useState({
     nome: "",
     usuario: "",
@@ -40,9 +44,28 @@ export default function NovoUsuarioModal({ visible, onClose }) {
     }));
   };
 
-  const handleGravar = () => {
-    console.log("Usuário salvo:", form);
-    // Aqui será enviada a requisição para o backend futuramente
+  const handleGravar = async () => {
+    if (!form.nome || !form.usuario || !form.senha) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) throw new Error("Erro ao salvar usuário");
+
+      console.log("✅ Usuário salvo com sucesso");
+      onClose();
+      onUsuarioCriado?.(); // atualiza a lista no modal pai
+    } catch (err) {
+      console.error("❌ Erro ao criar usuário:", err);
+      alert("Erro ao salvar usuário.");
+    }
   };
 
   return (

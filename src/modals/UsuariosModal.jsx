@@ -157,6 +157,7 @@ export default function UsuariosModal({ visible, onClose }) {
       <NovoUsuarioModal
         visible={novoUsuarioAberto}
         onClose={() => setNovoUsuarioAberto(false)}
+        onUsuarioCriado={fetchUsuarios} // recarrega a lista após salvar
       />
 
       <EditarUsuarioModal
