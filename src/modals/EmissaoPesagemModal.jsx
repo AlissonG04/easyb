@@ -15,7 +15,6 @@ export default function EmissaoPesagemModal({ visible, onClose }) {
     observacoes: "",
   });
 
-  // Atualiza o bruto automaticamente sempre que tara ou liquido mudar
   useEffect(() => {
     const tara = parseFloat(form.tara) || 0;
     const liquido = parseFloat(form.liquido) || 0;
@@ -33,15 +32,40 @@ export default function EmissaoPesagemModal({ visible, onClose }) {
     }));
   };
 
-  const handleEmitir = () => {
-    const now = new Date();
-    const dados = {
-      ...form,
-      data: now.toLocaleDateString("pt-BR"),
-      hora: now.toLocaleTimeString("pt-BR"),
-    };
+  const handleEmitir = async () => {
+    try {
+      const now = new Date();
+      const payload = {
+        cliente: form.cliente,
+        produto: form.produto,
+        placa: form.placa,
+        motorista: form.motorista,
+        observacoes: form.observacoes,
+        tara: parseInt(form.tara) || 0,
+        liquido: parseInt(form.liquido) || 0,
+        bruto: parseInt(form.bruto) || 0,
+        data: now.toISOString().split("T")[0], // yyyy-mm-dd
+        hora: now.toTimeString().split(" ")[0], // HH:MM:SS
+      };
 
-    emitirTicketPesagem(dados);
+      const response = await fetch("http://localhost:3000/pesagens", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao emitir pesagem.");
+      }
+
+      const pesagemSalva = await response.json();
+      emitirTicketPesagem(pesagemSalva); // gera o ticket com dados reais
+
+      onClose();
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao emitir a pesagem.");
+    }
   };
 
   return (
