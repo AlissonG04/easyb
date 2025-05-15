@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import balancaIcon from "../assets/balancas.png";
 import pauseIcon from "../assets/pause.png";
 import playIcon from "../assets/iniciar.png";
 import SolicitacaoComplementoModal from "../modals/SolicitacaoComplementoModal";
+
+const socket = io("http://localhost:3000");
 
 export default function BalancasModal({ visible, onClose }) {
   const [peso1, setPeso1] = useState(0);
@@ -15,11 +18,19 @@ export default function BalancasModal({ visible, onClose }) {
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (ativo1) setPeso1((Math.random() * 10000).toFixed(2));
-      if (ativo2) setPeso2((Math.random() * 10000).toFixed(2));
-    }, 1000);
-    return () => clearInterval(interval);
+    const receberPeso = (data) => {
+      if (data.balanca === "Balança 01" && ativo1) {
+        setPeso1(data.peso);
+      } else if (data.balanca === "Balança 02" && ativo2) {
+        setPeso2(data.peso);
+      }
+    };
+
+    socket.on("peso-balanca", receberPeso);
+
+    return () => {
+      socket.off("peso-balanca", receberPeso);
+    };
   }, [ativo1, ativo2]);
 
   if (!visible) return null;
@@ -64,7 +75,6 @@ export default function BalancasModal({ visible, onClose }) {
   return (
     <>
       <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-6xl bg-white shadow rounded p-6 z-50">
-        {/* Cabeçalho */}
         <div className="flex items-center justify-between border-b pb-3">
           <div className="flex items-center gap-2">
             <img src={balancaIcon} className="w-5 h-5" />
@@ -75,14 +85,12 @@ export default function BalancasModal({ visible, onClose }) {
           </button>
         </div>
 
-        {/* Balanças */}
         <div className="flex justify-around mt-8 gap-10">
           {renderBalanca("Balança 01", peso1, ativo1, setAtivo1)}
           {renderBalanca("Balança 02", peso2, ativo2, setAtivo2)}
         </div>
       </div>
 
-      {/* Modal de Solicitação de Complemento */}
       <SolicitacaoComplementoModal
         visible={complementoModal.visivel}
         balanca={complementoModal.balanca}
