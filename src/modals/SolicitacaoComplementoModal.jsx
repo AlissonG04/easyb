@@ -9,12 +9,48 @@ export default function SolicitacaoComplementoModal({
   const [tara, setTara] = useState("");
   const [liquido, setLiquido] = useState("");
   const [bruto, setBruto] = useState(0);
+  const [placa, setPlaca] = useState("");
+
+  // Simula usuário logado
+  const solicitante = "Admin";
 
   useEffect(() => {
     const t = parseFloat(tara) || 0;
     const l = parseFloat(liquido) || 0;
     setBruto(t + l);
   }, [tara, liquido]);
+
+  const enviarSolicitacaoComplemento = async () => {
+    try {
+      const payload = {
+        placa,
+        balanca,
+        solicitante,
+        tara: parseInt(tara) || 0,
+        liquido: parseInt(liquido) || 0,
+        bruto_antes: bruto,
+        bruto_depois: 0,
+      };
+
+      const response = await fetch("http://localhost:3000/complementos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar solicitação");
+      }
+
+      console.log("Solicitação enviada com sucesso");
+      onClose();
+    } catch (err) {
+      console.error("Erro ao enviar solicitação:", err);
+      alert("Erro ao solicitar complemento.");
+    }
+  };
 
   if (!visible) return null;
 
@@ -39,6 +75,16 @@ export default function SolicitacaoComplementoModal({
       {/* Formulário */}
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex flex-col text-sm w-32">
+          <label className="mb-1 bg-gray-200 px-2 py-1 rounded">Placa</label>
+          <input
+            type="text"
+            value={placa}
+            onChange={(e) => setPlaca(e.target.value)}
+            className="bg-gray-100 px-3 py-1 rounded outline-none"
+          />
+        </div>
+
+        <div className="flex flex-col text-sm w-24">
           <label className="mb-1 bg-gray-200 px-2 py-1 rounded">Tara</label>
           <input
             type="number"
@@ -48,7 +94,7 @@ export default function SolicitacaoComplementoModal({
           />
         </div>
 
-        <div className="flex flex-col text-sm w-32">
+        <div className="flex flex-col text-sm w-24">
           <label className="mb-1 bg-gray-200 px-2 py-1 rounded">Líquido</label>
           <input
             type="number"
@@ -58,7 +104,7 @@ export default function SolicitacaoComplementoModal({
           />
         </div>
 
-        <div className="flex flex-col text-sm w-32">
+        <div className="flex flex-col text-sm w-24">
           <label className="mb-1 bg-gray-200 px-2 py-1 rounded">Bruto</label>
           <input
             type="number"
@@ -69,7 +115,10 @@ export default function SolicitacaoComplementoModal({
         </div>
 
         <div className="flex-1 text-center mt-4">
-          <button className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition text-sm">
+          <button
+            onClick={enviarSolicitacaoComplemento}
+            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition text-sm"
+          >
             Enviar
           </button>
         </div>
