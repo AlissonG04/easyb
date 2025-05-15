@@ -8,20 +8,23 @@ export default function RelatorioBuscaModal({ visible, onClose, titulo }) {
   if (!visible) return null;
 
   const gerarRelatorio = async () => {
-    // Valida se os campos datas estão preenchidos
     if (!dataInicial || !dataFinal) {
       alert("Por favor, informe a data inicial e final.");
       return;
     }
+
     try {
       let url = "";
       let html = "";
       let dadosFormatados = [];
-
       const filtros = { dataInicial, dataFinal };
 
       if (titulo.includes("Usuários")) {
-        url = "http://localhost:3000/usuarios";
+        const query = new URLSearchParams();
+        if (dataInicial) query.append("dataInicial", dataInicial);
+        if (dataFinal) query.append("dataFinal", dataFinal);
+
+        url = `http://localhost:3000/usuarios?${query.toString()}`;
         html = "public/relatorio-usuarios.html";
 
         const res = await fetch(url);
@@ -59,7 +62,6 @@ export default function RelatorioBuscaModal({ visible, onClose, titulo }) {
         dadosFormatados = await res.json();
       }
 
-      // Salvar localStorage e abrir relatório
       localStorage.setItem("relatorioDados", JSON.stringify(dadosFormatados));
       localStorage.setItem("relatorioFiltros", JSON.stringify(filtros));
       window.open(html, "_blank");
