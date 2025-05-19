@@ -10,7 +10,7 @@ export default function Header({ onMenuClick }) {
         >
           ☰
         </div>
-        <img src={logo} alt="Easy Balance Logo" className="h-8" />
+        <img src={logo} alt="SYN SCALE Logo" className="h-8" />
       </div>
     </header>
   );
